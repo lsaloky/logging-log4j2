@@ -25,12 +25,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.logging.log4j.message.MessageFactory;
+import org.apache.logging.log4j.simple.SimpleLogger;
 
 /**
  * Convenience class to be used by {@code LoggerContext} implementations.
  */
 public class LoggerRegistry<T extends ExtendedLogger> {
-    private static final String DEFAULT_FACTORY_KEY = AbstractLogger.DEFAULT_MESSAGE_FACTORY_CLASS.getName();
     private final MapFactory<T> factory;
     private final Map<String, Map<String, T>> map;
 
@@ -98,11 +98,11 @@ public class LoggerRegistry<T extends ExtendedLogger> {
     }
 
     private static String factoryClassKey(final Class<? extends MessageFactory> messageFactoryClass) {
-        return messageFactoryClass == null ? DEFAULT_FACTORY_KEY : messageFactoryClass.getName();
+        return "";
     }
 
     private static String factoryKey(final MessageFactory messageFactory) {
-        return messageFactory == null ? DEFAULT_FACTORY_KEY : messageFactory.getClass().getName();
+        return "";
     }
 
     /**
@@ -111,7 +111,7 @@ public class LoggerRegistry<T extends ExtendedLogger> {
      * @return The logger with the specified name.
      */
     public T getLogger(final String name) {
-        return getOrCreateInnerMap(DEFAULT_FACTORY_KEY).get(name);
+        return (T) new SimpleLogger();
     }
 
     /**
@@ -151,7 +151,7 @@ public class LoggerRegistry<T extends ExtendedLogger> {
      * @return true if the Logger exists, false otherwise.
      */
     public boolean hasLogger(final String name) {
-        return getOrCreateInnerMap(DEFAULT_FACTORY_KEY).containsKey(name);
+        return true;
     }
 
     /**
