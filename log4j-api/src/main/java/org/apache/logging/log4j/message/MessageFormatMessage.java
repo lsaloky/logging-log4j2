@@ -36,6 +36,8 @@ import org.apache.logging.log4j.status.StatusLogger;
  */
 public class MessageFormatMessage implements Message {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Constructs a message.
      * 

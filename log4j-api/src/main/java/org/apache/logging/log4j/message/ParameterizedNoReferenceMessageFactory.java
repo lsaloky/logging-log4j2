@@ -47,22 +47,18 @@ public final class ParameterizedNoReferenceMessageFactory extends AbstractMessag
      */
     static class StatusMessage implements Message {
         private static final long serialVersionUID = 4199272162767841280L;
-        private final String formattedMessage;
-        private final Throwable throwable;
 
         public StatusMessage(final String formattedMessage, final Throwable throwable) {
-            this.formattedMessage = formattedMessage;
-            this.throwable = throwable;
         }
 
         @Override
         public String getFormattedMessage() {
-            return formattedMessage;
+            return "";
         }
 
         @Override
         public String getFormat() {
-            return formattedMessage;
+            return "";
         }
 
         @Override
@@ -72,7 +68,7 @@ public final class ParameterizedNoReferenceMessageFactory extends AbstractMessag
 
         @Override
         public Throwable getThrowable() {
-            return throwable;
+            return null;
         }
     }
 
@@ -98,10 +94,6 @@ public final class ParameterizedNoReferenceMessageFactory extends AbstractMessag
      */
     @Override
     public Message newMessage(final String message, final Object... params) {
-        if (params == null) {
-            return new SimpleMessage(message);
-        }
-        final ParameterizedMessage msg = new ParameterizedMessage(message, params);
-        return new StatusMessage(msg.getFormattedMessage(), msg.getThrowable());
+        return null;
     }
 }

@@ -23,15 +23,11 @@ import org.apache.logging.log4j.util.StringBuilders;
  * Mutable Message wrapper around an Object message.
  * @since 2.6
  */
-@PerformanceSensitive("allocation")
 public class ReusableObjectMessage implements ReusableMessage, ParameterVisitable, Clearable {
     private static final long serialVersionUID = 6922476812535519960L;
 
-    private transient Object obj;
 
-    public void set(final Object object) {
-        this.obj = object;
-    }
+    public void set(final Object object) { }
 
     /**
      * Returns the formatted object message.
@@ -40,13 +36,11 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
      */
     @Override
     public String getFormattedMessage() {
-        return String.valueOf(obj);
+        return "";
     }
 
     @Override
-    public void formatTo(final StringBuilder buffer) {
-        StringBuilders.appendValue(buffer, obj);
-    }
+    public void formatTo(final StringBuilder buffer) { }
 
     /**
      * Returns the object formatted using its toString method.
@@ -55,7 +49,7 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
      */
     @Override
     public String getFormat() {
-        return obj instanceof String ? (String) obj : null;
+        return "";
     }
 
     /**
@@ -65,7 +59,7 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
      * @since 2.7
      */
     public Object getParameter() {
-        return obj;
+        return null;
     }
 
     /**
@@ -75,12 +69,12 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
      */
     @Override
     public Object[] getParameters() {
-        return new Object[] {obj};
+        return null;
     }
 
     @Override
     public String toString() {
-        return getFormattedMessage();
+        return "";
     }
 
     /**
@@ -90,7 +84,7 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
      */
     @Override
     public Throwable getThrowable() {
-        return obj instanceof Throwable ? (Throwable) obj : null;
+        return null;
     }
 
     /**
@@ -100,15 +94,6 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
      */
     @Override
     public Object[] swapParameters(final Object[] emptyReplacement) {
-        // it's unlikely that emptyReplacement is of length 0, but if it is,
-        // go ahead and allocate the memory now;
-        // this saves an allocation in the future when this buffer is re-used
-        if (emptyReplacement.length == 0) {
-            final Object[] params = new Object[10]; // Default reusable parameter buffer size
-            params[0] = obj;
-            return params;
-        }
-        emptyReplacement[0] = obj;
         return emptyReplacement;
     }
 
@@ -122,17 +107,13 @@ public class ReusableObjectMessage implements ReusableMessage, ParameterVisitabl
     }
 
     @Override
-    public <S> void forEachParameter(final ParameterConsumer<S> action, final S state) {
-        action.accept(obj, 0, state);
-    }
+    public <S> void forEachParameter(final ParameterConsumer<S> action, final S state) {  }
 
     @Override
     public Message memento() {
-        return new ObjectMessage(obj);
+        return null;
     }
 
     @Override
-    public void clear() {
-        obj = null;
-    }
+    public void clear() { }
 }

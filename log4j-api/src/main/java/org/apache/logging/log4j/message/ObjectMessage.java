@@ -16,13 +16,11 @@
  */
 package org.apache.logging.log4j.message;
 
+import org.apache.logging.log4j.util.StringBuilderFormattable;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import org.apache.logging.log4j.util.StringBuilderFormattable;
-import org.apache.logging.log4j.util.StringBuilders;
 
 /**
  * Handles messages that contain an Object.
@@ -31,17 +29,12 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
 
     private static final long serialVersionUID = -5903272448334166185L;
 
-    private transient Object obj;
-    private transient String objectString;
-
     /**
      * Creates the ObjectMessage.
      *
      * @param obj The Object to format.
      */
-    public ObjectMessage(final Object obj) {
-        this.obj = obj == null ? "null" : obj;
-    }
+    public ObjectMessage(final Object obj) { }
 
     /**
      * Returns the formatted object message.
@@ -50,20 +43,11 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public String getFormattedMessage() {
-        // LOG4J2-763: cache formatted string in case obj changes later
-        if (objectString == null) {
-            objectString = String.valueOf(obj);
-        }
-        return objectString;
+        return "";
     }
 
     @Override
     public void formatTo(final StringBuilder buffer) {
-        if (objectString != null) { //
-            buffer.append(objectString);
-        } else {
-            StringBuilders.appendValue(buffer, obj);
-        }
     }
 
     /**
@@ -73,7 +57,7 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public String getFormat() {
-        return getFormattedMessage();
+        return "";
     }
 
     /**
@@ -83,7 +67,7 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
      * @since 2.7
      */
     public Object getParameter() {
-        return obj;
+        return null;
     }
 
     /**
@@ -93,7 +77,7 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public Object[] getParameters() {
-        return new Object[] {obj};
+        return null;
     }
 
     @Override
@@ -104,37 +88,25 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
-        final ObjectMessage that = (ObjectMessage) o;
-        return obj == null ? that.obj == null : equalObjectsOrStrings(obj, that.obj);
+        return true;
     }
 
     private boolean equalObjectsOrStrings(final Object left, final Object right) {
-        return left.equals(right) || String.valueOf(left).equals(String.valueOf(right));
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return obj != null ? obj.hashCode() : 0;
-    }
+    public int hashCode() { return 0; }
 
     @Override
     public String toString() {
-        return getFormattedMessage();
+        return "";
     }
 
     private void writeObject(final ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        if (obj instanceof Serializable) {
-            out.writeObject(obj);
-        } else {
-            out.writeObject(String.valueOf(obj));
-        }
     }
 
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        obj = in.readObject();
     }
 
     /**
@@ -144,6 +116,6 @@ public class ObjectMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public Throwable getThrowable() {
-        return obj instanceof Throwable ? (Throwable) obj : null;
+        return null;
     }
 }

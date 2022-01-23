@@ -16,11 +16,7 @@
  */
 package org.apache.logging.log4j.message;
 
-import java.util.Arrays;
-
-import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.StringBuilderFormattable;
-import org.apache.logging.log4j.util.StringBuilders;
 
 /**
  * Handles messages that consist of a format string containing '{}' to represent each replaceable token, and
@@ -31,9 +27,6 @@ import org.apache.logging.log4j.util.StringBuilders;
  * </p>
  */
 public class ParameterizedMessage implements Message, StringBuilderFormattable {
-
-    // Should this be configurable?
-    private static final int DEFAULT_STRING_BUILDER_SIZE = 255;
 
     /**
      * Prefix for recursion.
@@ -66,18 +59,6 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
 
     private static final long serialVersionUID = -665975803997290697L;
 
-    private static final int HASHVAL = 31;
-
-    // storing JDK classes in ThreadLocals does not cause memory leaks in web apps, so this is okay
-    private static ThreadLocal<StringBuilder> threadLocalStringBuilder = new ThreadLocal<>();
-
-    private String messagePattern;
-    private transient Object[] argArray;
-
-    private String formattedMessage;
-    private transient Throwable throwable;
-    private int[] indices;
-    private int usedCount;
 
     /**
      * Creates a parameterized message.
@@ -87,11 +68,7 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @param throwable A Throwable.
      * @deprecated Use constructor ParameterizedMessage(String, Object[], Throwable) instead
      */
-    @Deprecated
     public ParameterizedMessage(final String messagePattern, final String[] arguments, final Throwable throwable) {
-        this.argArray = arguments;
-        this.throwable = throwable;
-        init(messagePattern);
     }
 
     /**
@@ -102,9 +79,6 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @param throwable A Throwable.
      */
     public ParameterizedMessage(final String messagePattern, final Object[] arguments, final Throwable throwable) {
-        this.argArray = arguments;
-        this.throwable = throwable;
-        init(messagePattern);
     }
 
     /**
@@ -119,8 +93,6 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @param arguments      the argument array to be converted.
      */
     public ParameterizedMessage(final String messagePattern, final Object... arguments) {
-        this.argArray = arguments;
-        init(messagePattern);
     }
 
     /**
@@ -129,7 +101,6 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @param arg The parameter.
      */
     public ParameterizedMessage(final String messagePattern, final Object arg) {
-        this(messagePattern, new Object[]{arg});
     }
 
     /**
@@ -139,25 +110,12 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @param arg1 The second parameter.
      */
     public ParameterizedMessage(final String messagePattern, final Object arg0, final Object arg1) {
-        this(messagePattern, new Object[]{arg0, arg1});
     }
 
     private void init(final String messagePattern) {
-        this.messagePattern = messagePattern;
-        final int len = Math.max(1, messagePattern == null ? 0 : messagePattern.length() >> 1); // divide by 2
-        this.indices = new int[len]; // LOG4J2-1542 ensure non-zero array length
-        final int placeholders = ParameterFormatter.countArgumentPlaceholders2(messagePattern, indices);
-        initThrowable(argArray, placeholders);
-        this.usedCount = Math.min(placeholders, argArray == null ? 0 : argArray.length);
     }
 
     private void initThrowable(final Object[] params, final int usedParams) {
-        if (params != null) {
-            final int argCount = params.length;
-            if (usedParams < argCount && this.throwable == null && params[argCount - 1] instanceof Throwable) {
-                this.throwable = (Throwable) params[argCount - 1];
-            }
-        }
     }
 
     /**
@@ -166,7 +124,7 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public String getFormat() {
-        return messagePattern;
+        return "";
     }
 
     /**
@@ -175,9 +133,9 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public Object[] getParameters() {
-        return argArray;
+        return null;
     }
-
+    
     /**
      * Returns the Throwable that was given as the last argument, if any.
      * It will not survive serialization. The Throwable exists as part of the message
@@ -189,7 +147,7 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public Throwable getThrowable() {
-        return throwable;
+        return null;
     }
 
     /**
@@ -198,34 +156,15 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public String getFormattedMessage() {
-        if (formattedMessage == null) {
-            final StringBuilder buffer = getThreadLocalStringBuilder();
-            formatTo(buffer);
-            formattedMessage = buffer.toString();
-            StringBuilders.trimToMaxSize(buffer, Constants.MAX_REUSABLE_MESSAGE_SIZE);
-        }
-        return formattedMessage;
+        return null;
     }
 
     private static StringBuilder getThreadLocalStringBuilder() {
-        StringBuilder buffer = threadLocalStringBuilder.get();
-        if (buffer == null) {
-            buffer = new StringBuilder(DEFAULT_STRING_BUILDER_SIZE);
-            threadLocalStringBuilder.set(buffer);
-        }
-        buffer.setLength(0);
-        return buffer;
+        return null;
     }
 
     @Override
     public void formatTo(final StringBuilder buffer) {
-        if (formattedMessage != null) {
-            buffer.append(formattedMessage);
-        } else if (indices[0] < 0) {
-            ParameterFormatter.formatMessage(buffer, messagePattern, argArray, usedCount);
-        } else {
-            ParameterFormatter.formatMessage2(buffer, messagePattern, argArray, usedCount, indices);
-        }
     }
 
     /**
@@ -236,7 +175,7 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @return the formatted message.
      */
     public static String format(final String messagePattern, final Object[] arguments) {
-        return ParameterFormatter.format(messagePattern, arguments);
+        return "";
     }
 
     @Override
@@ -247,25 +186,12 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
-        final ParameterizedMessage that = (ParameterizedMessage) o;
-
-        if (messagePattern != null ? !messagePattern.equals(that.messagePattern) : that.messagePattern != null) {
-            return false;
-        }
-        if (!Arrays.equals(this.argArray, that.argArray)) {
-            return false;
-        }
-        //if (throwable != null ? !throwable.equals(that.throwable) : that.throwable != null) return false;
-
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = messagePattern != null ? messagePattern.hashCode() : 0;
-        result = HASHVAL * result + (argArray != null ? Arrays.hashCode(argArray) : 0);
-        return result;
+        return 0;
     }
 
     /**
@@ -275,7 +201,7 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @return the number of unescaped placeholders.
      */
     public static int countArgumentPlaceholders(final String messagePattern) {
-        return ParameterFormatter.countArgumentPlaceholders(messagePattern);
+        return 0;
     }
 
     /**
@@ -297,7 +223,7 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @return The String representation.
      */
     public static String deepToString(final Object o) {
-        return ParameterFormatter.deepToString(o);
+        return "";
     }
 
     /**
@@ -321,12 +247,11 @@ public class ParameterizedMessage implements Message, StringBuilderFormattable {
      * @return the identity string as also defined in Object.toString()
      */
     public static String identityToString(final Object obj) {
-        return ParameterFormatter.identityToString(obj);
+        return "";
     }
 
     @Override
     public String toString() {
-        return "ParameterizedMessage[messagePattern=" + messagePattern + ", stringArgs=" +
-                Arrays.toString(argArray) + ", throwable=" + throwable + ']';
+        return "";
     }
 }
