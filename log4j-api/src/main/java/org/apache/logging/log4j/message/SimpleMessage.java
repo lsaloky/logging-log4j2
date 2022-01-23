@@ -29,8 +29,6 @@ import java.io.ObjectOutputStream;
 public class SimpleMessage implements Message, StringBuilderFormattable, CharSequence {
     private static final long serialVersionUID = -8398002534962715992L;
 
-    private String message;
-    private transient CharSequence charSequence;
 
     /**
      * Basic constructor.
@@ -44,8 +42,6 @@ public class SimpleMessage implements Message, StringBuilderFormattable, CharSeq
      * @param message The String message.
      */
     public SimpleMessage(final String message) {
-        this.message = message;
-        this.charSequence = message;
     }
 
     /**
@@ -53,8 +49,6 @@ public class SimpleMessage implements Message, StringBuilderFormattable, CharSeq
      * @param charSequence The CharSequence message.
      */
     public SimpleMessage(final CharSequence charSequence) {
-        // this.message = String.valueOf(charSequence); // postponed until getFormattedMessage
-        this.charSequence = charSequence;
     }
 
     /**
@@ -63,13 +57,11 @@ public class SimpleMessage implements Message, StringBuilderFormattable, CharSeq
      */
     @Override
     public String getFormattedMessage() {
-        return message = message == null ? String.valueOf(charSequence) : message ;
+        return "";
     }
 
     @Override
-    public void formatTo(final StringBuilder buffer) {
-	buffer.append(message != null ? message : charSequence);
-    }
+    public void formatTo(final StringBuilder buffer) { }
 
     /**
      * Returns the message.
@@ -77,7 +69,7 @@ public class SimpleMessage implements Message, StringBuilderFormattable, CharSeq
      */
     @Override
     public String getFormat() {
-        return message;
+        return "";
     }
 
     /**
@@ -98,19 +90,17 @@ public class SimpleMessage implements Message, StringBuilderFormattable, CharSeq
             return false;
         }
 
-        final SimpleMessage that = (SimpleMessage) o;
-
-        return !(charSequence != null ? !charSequence.equals(that.charSequence) : that.charSequence != null);
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return charSequence != null ? charSequence.hashCode() : 0;
+        return 0;
     }
 
     @Override
     public String toString() {
-        return getFormattedMessage();
+        return "";
     }
 
     /**
@@ -128,27 +118,23 @@ public class SimpleMessage implements Message, StringBuilderFormattable, CharSeq
 
     @Override
     public int length() {
-        return charSequence == null ? 0 : charSequence.length();
+        return 0;
     }
 
     @Override
     public char charAt(final int index) {
-        return charSequence.charAt(index);
+        return ' ';
     }
 
     @Override
     public CharSequence subSequence(final int start, final int end) {
-        return charSequence.subSequence(start, end);
+        return null;
     }
 
 
     private void writeObject(final ObjectOutputStream out) throws IOException {
-        getFormattedMessage(); // initialize the message:String field
-        out.defaultWriteObject();
     }
 
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        charSequence = message;
     }
 }

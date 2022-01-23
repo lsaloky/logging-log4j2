@@ -16,12 +16,11 @@
  */
 package org.apache.logging.log4j.message;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.StringBuilderFormattable;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A collection of StructuredDataMessages.
@@ -30,43 +29,26 @@ public class StructuredDataCollectionMessage implements StringBuilderFormattable
         MessageCollectionMessage<StructuredDataMessage> {
     private static final long serialVersionUID = 5725337076388822924L;
 
-    private final List<StructuredDataMessage> structuredDataMessageList;
-
     public StructuredDataCollectionMessage(final List<StructuredDataMessage> messages) {
-        this.structuredDataMessageList = messages;
     }
 
     @Override
     public Iterator<StructuredDataMessage> iterator() {
-        return structuredDataMessageList.iterator();
+        return null;
     }
 
     @Override
     public String getFormattedMessage() {
-        final StringBuilder sb = new StringBuilder();
-        formatTo(sb);
-        return sb.toString();
+        return "";
     }
 
     @Override
     public String getFormat() {
-        final StringBuilder sb = new StringBuilder();
-        for (final StructuredDataMessage msg : structuredDataMessageList) {
-            if (msg.getFormat() != null) {
-                if (sb.length() > 0) {
-                    sb.append(", ");
-                }
-                sb.append(msg.getFormat());
-            }
-        }
-        return sb.toString();
+        return "";
     }
 
     @Override
     public void formatTo(final StringBuilder buffer) {
-        for (final StructuredDataMessage msg : structuredDataMessageList) {
-            msg.formatTo(buffer);
-        }
     }
 
     @Override
@@ -76,12 +58,6 @@ public class StructuredDataCollectionMessage implements StringBuilderFormattable
 
     @Override
     public Throwable getThrowable() {
-        for (final StructuredDataMessage msg : structuredDataMessageList) {
-            final Throwable t = msg.getThrowable();
-            if (t != null) {
-                return t;
-            }
-        }
         return null;
     }
 }
