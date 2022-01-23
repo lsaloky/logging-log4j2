@@ -16,17 +16,10 @@
  */
 package org.apache.logging.log4j.simple;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.MessageFactory;
-import org.apache.logging.log4j.spi.AbstractLogger;
 import org.apache.logging.log4j.spi.ExtendedLogger;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.apache.logging.log4j.spi.LoggerRegistry;
-import org.apache.logging.log4j.util.PropertiesUtil;
 
 /**
  * A simple {@link LoggerContext} implementation.
@@ -36,73 +29,7 @@ public class SimpleLoggerContext implements LoggerContext {
     /** Singleton instance. */
     static final SimpleLoggerContext INSTANCE = new SimpleLoggerContext();
     
-    private static final String SYSTEM_OUT = "system.out";
-
-    private static final String SYSTEM_ERR = "system.err";
-
-    /** The default format to use when formatting dates */
-    protected static final String DEFAULT_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss:SSS zzz";
-
-    /** All system properties used by <code>SimpleLog</code> start with this */
-    protected static final String SYSTEM_PREFIX = "org.apache.logging.log4j.simplelog.";
-
-    private final PropertiesUtil props;
-
-    /** Include the instance name in the log message? */
-    private final boolean showLogName;
-
-    /**
-     * Include the short name (last component) of the logger in the log message. Defaults to true - otherwise we'll be
-     * lost in a flood of messages without knowing who sends them.
-     */
-    private final boolean showShortName;
-
-    /** Include the current time in the log message */
-    private final boolean showDateTime;
-
-    /** Include the ThreadContextMap in the log message */
-    private final boolean showContextMap;
-    
-    /** The date and time format to use in the log message */
-    private final String dateTimeFormat;
-
-    private final Level defaultLevel;
-
-    private final PrintStream stream;
-
-    private final LoggerRegistry<ExtendedLogger> loggerRegistry = new LoggerRegistry<>();
-
-    /**
-     * Constructs a new initialized instance.
-     */
-    public SimpleLoggerContext() {
-        props = new PropertiesUtil("log4j2.simplelog.properties");
-
-        showContextMap = props.getBooleanProperty(SYSTEM_PREFIX + "showContextMap", false);
-        showLogName = props.getBooleanProperty(SYSTEM_PREFIX + "showlogname", false);
-        showShortName = props.getBooleanProperty(SYSTEM_PREFIX + "showShortLogname", true);
-        showDateTime = props.getBooleanProperty(SYSTEM_PREFIX + "showdatetime", false);
-        final String lvl = props.getStringProperty(SYSTEM_PREFIX + "level");
-        defaultLevel = Level.toLevel(lvl, Level.ERROR);
-
-        dateTimeFormat = showDateTime ? props.getStringProperty(SimpleLoggerContext.SYSTEM_PREFIX + "dateTimeFormat",
-                DEFAULT_DATE_TIME_FORMAT) : null;
-
-        final String fileName = props.getStringProperty(SYSTEM_PREFIX + "logFile", SYSTEM_ERR);
-        PrintStream ps;
-        if (SYSTEM_ERR.equalsIgnoreCase(fileName)) {
-            ps = System.err;
-        } else if (SYSTEM_OUT.equalsIgnoreCase(fileName)) {
-            ps = System.out;
-        } else {
-            try {
-                ps = new PrintStream(new FileOutputStream(fileName));
-            } catch (final FileNotFoundException fnfe) {
-                ps = System.err;
-            }
-        }
-        this.stream = ps;
-    }
+    public SimpleLoggerContext() { }
 
     @Override
     public Object getExternalContext() {
@@ -110,33 +37,16 @@ public class SimpleLoggerContext implements LoggerContext {
     }
 
     @Override
-    public ExtendedLogger getLogger(final String name) {
-        return getLogger(name, null);
-    }
+    public ExtendedLogger getLogger(final String name) { return new SimpleLogger(); }
 
     @Override
-    public ExtendedLogger getLogger(final String name, final MessageFactory messageFactory) {
-        // Note: This is the only method where we add entries to the 'loggerRegistry' ivar.
-        final ExtendedLogger extendedLogger = loggerRegistry.getLogger(name, messageFactory);
-        if (extendedLogger != null) {
-            AbstractLogger.checkMessageFactory(extendedLogger, messageFactory);
-            return extendedLogger;
-        }
-        final SimpleLogger simpleLogger = new SimpleLogger(name, defaultLevel, showLogName, showShortName, showDateTime,
-                showContextMap, dateTimeFormat, messageFactory, props, stream);
-        loggerRegistry.putIfAbsent(name, messageFactory, simpleLogger);
-        return loggerRegistry.getLogger(name, messageFactory);
+    public ExtendedLogger getLogger(final String name, final MessageFactory messageFactory) { 
+        return new SimpleLogger();
     }
 
-    /**
-     * Gets the LoggerRegistry.
-     *
-     * @return the LoggerRegistry.
-     * @since 2.17.2
-     */
     @Override
     public LoggerRegistry<ExtendedLogger> getLoggerRegistry() {
-        return loggerRegistry;
+        return new LoggerRegistry<ExtendedLogger>();
     }
 
     @Override
