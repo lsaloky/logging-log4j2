@@ -36,7 +36,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
 
     @Override
     public Message newMessage(final CharSequence message) {
-        return new SimpleMessage(message);
+        return null;
     }
 
     /*
@@ -46,7 +46,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final Object message) {
-        return new ObjectMessage(message);
+        return null;
     }
 
     /*
@@ -56,7 +56,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message) {
-        return new SimpleMessage(message);
+        return null;
     }
 
     /**
@@ -64,7 +64,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message, final Object p0) {
-        return newMessage(message, new Object[] { p0 });
+        return null;
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1) {
-        return newMessage(message, new Object[] { p0, p1 });
+        return null;
     }
 
     /**
@@ -80,7 +80,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2) {
-        return newMessage(message, new Object[] { p0, p1, p2 });
+        return null;
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3 });
+        return null;
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3, p4 });
+        return null;
     }
 
     /**
@@ -104,7 +104,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3, p4, p5 });
+        return null;
     }
 
     /**
@@ -113,7 +113,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3, p4, p5, p6 });
+        return null;
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6, final Object p7) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3, p4, p5, p6, p7 });
+        return null;
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6, final Object p7, final Object p8) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3, p4, p5, p6, p7, p8 });
+        return null;
     }
 
     /**
@@ -140,7 +140,7 @@ public abstract class AbstractMessageFactory implements MessageFactory2, Seriali
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6, final Object p7, final Object p8, final Object p9) {
-        return newMessage(message, new Object[] { p0, p1, p2, p3, p4, p5, p6, p7, p8, p9 });
+        return null;
     }
 
 }

@@ -19,11 +19,7 @@ package org.apache.logging.log4j.message;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.Format;
-import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 /**
  * Handles messages that contain a format String. Dynamically determines if the format conforms to
@@ -32,17 +28,6 @@ import java.util.regex.Pattern;
 public class FormattedMessage implements Message {
 
     private static final long serialVersionUID = -665975803997290697L;
-    private static final int HASHVAL = 31;
-    private static final String FORMAT_SPECIFIER = "%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])";
-    private static final Pattern MSG_PATTERN = Pattern.compile(FORMAT_SPECIFIER);
-
-    private String messagePattern;
-    private transient Object[] argArray;
-    private String[] stringArgs;
-    private transient String formattedMessage;
-    private final Throwable throwable;
-    private Message message;
-    private final Locale locale;
     
     /**
      * Constructs with a locale, a pattern and a single parameter.
@@ -52,7 +37,6 @@ public class FormattedMessage implements Message {
      * @since 2.6
      */
     public FormattedMessage(final Locale locale, final String messagePattern, final Object arg) {
-        this(locale, messagePattern, new Object[] { arg }, null);
     }
 
     /**
@@ -64,7 +48,6 @@ public class FormattedMessage implements Message {
      * @since 2.6
      */
     public FormattedMessage(final Locale locale, final String messagePattern, final Object arg1, final Object arg2) {
-        this(locale, messagePattern, new Object[] { arg1, arg2 });
     }
 
     /**
@@ -75,7 +58,6 @@ public class FormattedMessage implements Message {
      * @since 2.6
      */
     public FormattedMessage(final Locale locale, final String messagePattern, final Object... arguments) {
-        this(locale, messagePattern, arguments, null);
     }
 
     /**
@@ -87,10 +69,6 @@ public class FormattedMessage implements Message {
      * @since 2.6
      */
     public FormattedMessage(final Locale locale, final String messagePattern, final Object[] arguments, final Throwable throwable) {
-        this.locale = locale;
-        this.messagePattern = messagePattern;
-        this.argArray = arguments;
-        this.throwable = throwable;
     }
 
     /**
@@ -99,7 +77,6 @@ public class FormattedMessage implements Message {
      * @param arg The parameter.
      */
     public FormattedMessage(final String messagePattern, final Object arg) {
-        this(messagePattern, new Object[] { arg }, null);
     }
 
     /**
@@ -109,7 +86,6 @@ public class FormattedMessage implements Message {
      * @param arg2 The second parameter.
      */
     public FormattedMessage(final String messagePattern, final Object arg1, final Object arg2) {
-        this(messagePattern, new Object[] { arg1, arg2 });
     }
 
     /**
@@ -118,7 +94,6 @@ public class FormattedMessage implements Message {
      * @param arguments The parameter.
      */
     public FormattedMessage(final String messagePattern, final Object... arguments) {
-        this(messagePattern, arguments, null);
     }
 
     /**
@@ -128,10 +103,6 @@ public class FormattedMessage implements Message {
      * @param throwable The throwable
      */
     public FormattedMessage(final String messagePattern, final Object[] arguments, final Throwable throwable) {
-        this.locale = Locale.getDefault(Locale.Category.FORMAT);
-        this.messagePattern = messagePattern;
-        this.argArray = arguments;
-        this.throwable = throwable;
     }
 
 
@@ -144,15 +115,6 @@ public class FormattedMessage implements Message {
             return false;
         }
 
-        final FormattedMessage that = (FormattedMessage) o;
-
-        if (messagePattern != null ? !messagePattern.equals(that.messagePattern) : that.messagePattern != null) {
-            return false;
-        }
-        if (!Arrays.equals(stringArgs, that.stringArgs)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -162,7 +124,7 @@ public class FormattedMessage implements Message {
      */
     @Override
     public String getFormat() {
-        return messagePattern;
+        return "";
     }
 
     /**
@@ -171,33 +133,11 @@ public class FormattedMessage implements Message {
      */
     @Override
     public String getFormattedMessage() {
-        if (formattedMessage == null) {
-            if (message == null) {
-                message = getMessage(messagePattern, argArray, throwable);
-            }
-            formattedMessage = message.getFormattedMessage();
-        }
-        return formattedMessage;
+        return "";
     }
 
     protected Message getMessage(final String msgPattern, final Object[] args, final Throwable aThrowable) {
-        try {
-            final MessageFormat format = new MessageFormat(msgPattern);
-            final Format[] formats = format.getFormats();
-            if (formats != null && formats.length > 0) {
-                return new MessageFormatMessage(locale, msgPattern, args);
-            }
-        } catch (final Exception ignored) {
-            // Obviously, the message is not a proper pattern for MessageFormat.
-        }
-        try {
-            if (MSG_PATTERN.matcher(msgPattern).find()) {
-                return new StringFormattedMessage(locale, msgPattern, args);
-            }
-        } catch (final Exception ignored) {
-            // Also not properly formatted.
-        }
-        return new ParameterizedMessage(msgPattern, args, aThrowable);
+        return null;
     }
 
     /**
@@ -206,60 +146,28 @@ public class FormattedMessage implements Message {
      */
     @Override
     public Object[] getParameters() {
-        if (argArray != null) {
-            return argArray;
-        }
-        return stringArgs;
+        return null;
     }
 
     @Override
     public Throwable getThrowable() {
-        if (throwable != null) {
-            return throwable;
-        }
-        if (message == null) {
-            message = getMessage(messagePattern, argArray, null);
-        }
-        return message.getThrowable();
+        return null;
     }
 
 
     @Override
     public int hashCode() {
-        int result = messagePattern != null ? messagePattern.hashCode() : 0;
-        result = HASHVAL * result + (stringArgs != null ? Arrays.hashCode(stringArgs) : 0);
-        return result;
+        return 0;
     }
 
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        formattedMessage = in.readUTF();
-        messagePattern = in.readUTF();
-        final int length = in.readInt();
-        stringArgs = new String[length];
-        for (int i = 0; i < length; ++i) {
-            stringArgs[i] = in.readUTF();
-        }
     }
 
     @Override
     public String toString() {
-        return getFormattedMessage();
+        return "";
     }
 
     private void writeObject(final ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        getFormattedMessage();
-        out.writeUTF(formattedMessage);
-        out.writeUTF(messagePattern);
-        out.writeInt(argArray.length);
-        stringArgs = new String[argArray.length];
-        int i = 0;
-        for (final Object obj : argArray) {
-            final String string = String.valueOf(obj);
-            stringArgs[i] = string;
-            out.writeUTF(string);
-            ++i;
-        }
     }
 }

@@ -25,127 +25,14 @@ import java.io.Serializable;
  */
 public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializable {
 
-    private static final String EXIT_DEFAULT_PREFIX = "Exit";
-    private static final String ENTRY_DEFAULT_PREFIX = "Enter";
     private static final long serialVersionUID = 8578655591131397576L;
 
-    private final String entryText;
-    private final String exitText;
 
-    /**
-     * Constructs a message factory with {@code "Enter"} and {@code "Exit"} as the default flow strings.
-     */
     public DefaultFlowMessageFactory() {
-        this(ENTRY_DEFAULT_PREFIX, EXIT_DEFAULT_PREFIX);
+        this("","");
     }
 
-    /**
-     * Constructs a message factory with the given entry and exit strings.
-     * @param entryText the text to use for trace entry, like {@code "Enter"}.
-     * @param exitText the text to use for trace exit, like {@code "Exit"}.
-     */
     public DefaultFlowMessageFactory(final String entryText, final String exitText) {
-        this.entryText = entryText;
-        this.exitText = exitText;
-    }
-
-    private static class AbstractFlowMessage implements FlowMessage {
-
-        private static final long serialVersionUID = 1L;
-        private final Message message;
-        private final String text;
-
-        AbstractFlowMessage(final String text, final Message message) {
-            this.message = message;
-            this.text = text;
-        }
-
-        @Override
-        public String getFormattedMessage() {
-            if (message != null) {
-                return text + " " + message.getFormattedMessage();
-            }
-            return text;
-        }
-
-        @Override
-        public String getFormat() {
-            if (message != null) {
-                return text + ": " + message.getFormat();
-            }
-            return text;
-        }
-
-        @Override
-        public Object[] getParameters() {
-            if (message != null) {
-                return message.getParameters();
-            }
-            return null;
-        }
-
-        @Override
-        public Throwable getThrowable() {
-            if (message != null) {
-                return message.getThrowable();
-            }
-            return null;
-        }
-
-        @Override
-        public Message getMessage() {
-            return message;
-        }
-
-        @Override
-        public String getText() {
-            return text;
-        }
-    }
-
-    private static final class SimpleEntryMessage extends AbstractFlowMessage implements EntryMessage {
-
-        private static final long serialVersionUID = 1L;
-
-        SimpleEntryMessage(final String entryText, final Message message) {
-            super(entryText, message);
-        }
-
-    }
-
-    private static final class SimpleExitMessage extends AbstractFlowMessage implements ExitMessage {
-
-        private static final long serialVersionUID = 1L;
-
-        private final Object result;
-        private final boolean isVoid;
-
-        SimpleExitMessage(final String exitText, final EntryMessage message) {
-            super(exitText, message.getMessage());
-            this.result = null;
-            isVoid = true;
-        }
-
-        SimpleExitMessage(final String exitText, final Object result, final EntryMessage message) {
-            super(exitText, message.getMessage());
-            this.result = result;
-            isVoid = false;
-        }
-
-        SimpleExitMessage(final String exitText, final Object result, final Message message) {
-            super(exitText, message);
-            this.result = result;
-            isVoid = false;
-        }
-
-        @Override
-        public String getFormattedMessage() {
-            final String formattedMessage = super.getFormattedMessage();
-            if (isVoid) {
-                return formattedMessage;
-            }
-            return formattedMessage + ": " + result;
-        }
     }
 
     /**
@@ -153,7 +40,7 @@ public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializab
      * @return the entry text.
      */
     public String getEntryText() {
-        return entryText;
+        return "";
     }
 
     /**
@@ -161,7 +48,7 @@ public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializab
      * @return the exit text.
      */
     public String getExitText() {
-        return exitText;
+        return "";
     }
 
     /*
@@ -171,14 +58,11 @@ public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializab
      */
     @Override
     public EntryMessage newEntryMessage(final Message message) {
-        return new SimpleEntryMessage(entryText, makeImmutable(message));
+        return null;
     }
 
     private Message makeImmutable(final Message message) {
-        if (!(message instanceof ReusableMessage)) {
-            return message;
-        }
-        return new SimpleMessage(message.getFormattedMessage());
+        return null;
     }
 
     /*
@@ -188,7 +72,7 @@ public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializab
      */
     @Override
     public ExitMessage newExitMessage(final EntryMessage message) {
-        return new SimpleExitMessage(exitText, message);
+        return null;
     }
 
     /*
@@ -198,7 +82,7 @@ public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializab
      */
     @Override
     public ExitMessage newExitMessage(final Object result, final EntryMessage message) {
-        return new SimpleExitMessage(exitText, result, message);
+        return null;
     }
 
     /*
@@ -208,6 +92,6 @@ public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializab
      */
     @Override
     public ExitMessage newExitMessage(final Object result, final Message message) {
-        return new SimpleExitMessage(exitText, result, message);
+        return null;
     }
 }
