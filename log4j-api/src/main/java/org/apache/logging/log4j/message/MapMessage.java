@@ -17,6 +17,7 @@
 package org.apache.logging.log4j.message;
 
 import org.apache.logging.log4j.util.BiConsumer;
+import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.IndexedReadOnlyStringMap;
 import org.apache.logging.log4j.util.MultiFormatStringBuilderFormattable;
 import org.apache.logging.log4j.util.TriConsumer;
@@ -70,7 +71,7 @@ public class MapMessage<M extends MapMessage<M, V>, V> implements MultiFormatStr
 
     @Override
     public Object[] getParameters() {
-        return null;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     @Override

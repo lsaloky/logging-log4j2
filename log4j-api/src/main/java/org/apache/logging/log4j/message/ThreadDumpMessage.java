@@ -28,6 +28,7 @@ import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
 import org.apache.logging.log4j.status.StatusLogger;
+import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.StringBuilderFormattable;
 import org.apache.logging.log4j.util.Strings;
 
@@ -129,7 +130,7 @@ public class ThreadDumpMessage implements Message, StringBuilderFormattable {
      */
     @Override
     public Object[] getParameters() {
-        return null;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
         /**

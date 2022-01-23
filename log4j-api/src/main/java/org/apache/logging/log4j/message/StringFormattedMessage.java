@@ -25,6 +25,7 @@ import java.util.Locale;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.status.StatusLogger;
+import org.apache.logging.log4j.util.Constants;
 
 /**
  * Handles messages that consist of a format string conforming to {@link java.util.Formatter}.
@@ -105,10 +106,7 @@ public class StringFormattedMessage implements Message {
      */
     @Override
     public Object[] getParameters() {
-        if (argArray != null) {
-            return argArray;
-        }
-        return stringArgs;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     protected String formatMessage(final String msgPattern, final Object... args) {

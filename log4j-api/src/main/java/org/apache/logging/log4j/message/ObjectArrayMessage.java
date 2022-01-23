@@ -16,6 +16,8 @@
  */
 package org.apache.logging.log4j.message;
 
+import org.apache.logging.log4j.util.Constants;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -84,7 +86,7 @@ public final class ObjectArrayMessage implements Message {
      */
     @Override
     public Object[] getParameters() {
-        return null;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     /**

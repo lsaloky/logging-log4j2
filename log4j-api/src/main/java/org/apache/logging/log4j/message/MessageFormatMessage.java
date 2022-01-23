@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.status.StatusLogger;
+import org.apache.logging.log4j.util.Constants;
 
 /**
  * Handles messages that consist of a format string conforming to java.text.MessageFormat.
@@ -80,7 +81,7 @@ public class MessageFormatMessage implements Message {
      */
     @Override
     public Object[] getParameters() {
-        return null;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     protected String formatMessage(final String msgPattern, final Object... args) {

@@ -32,6 +32,7 @@ import org.apache.logging.log4j.core.util.*;
 import org.apache.logging.log4j.core.time.Instant;
 import org.apache.logging.log4j.core.time.MutableInstant;
 import org.apache.logging.log4j.message.*;
+import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.ReadOnlyStringMap;
 import org.apache.logging.log4j.util.StringBuilders;
 import org.apache.logging.log4j.util.StringMap;
@@ -241,9 +242,7 @@ public class RingBufferLogEvent implements LogEvent, ReusableMessage, CharSequen
      * @see ReusableMessage#getParameters()
      */
     @Override
-    public Object[] getParameters() {
-        return parameters == null ? null : Arrays.copyOf(parameters, parameterCount);
-    }
+    public Object[] getParameters() { return Constants.EMPTY_OBJECT_ARRAY; }
 
     /**
      * @see ReusableMessage#getThrowable()

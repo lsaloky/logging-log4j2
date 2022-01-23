@@ -26,24 +26,19 @@ import org.apache.logging.log4j.util.PerformanceSensitive;
 @PerformanceSensitive("allocation")
 public class ReusableSimpleMessage implements ReusableMessage, CharSequence, ParameterVisitable, Clearable {
     private static final long serialVersionUID = -9199974506498249809L;
-    private CharSequence charSequence;
 
-    public void set(final String message) {
-        this.charSequence = message;
-    }
+    public void set(final String message) {  }
 
-    public void set(final CharSequence charSequence) {
-        this.charSequence = charSequence;
-    }
+    public void set(final CharSequence charSequence) {  }
 
     @Override
     public String getFormattedMessage() {
-        return String.valueOf(charSequence);
+        return "";
     }
 
     @Override
     public String getFormat() {
-        return charSequence instanceof String ? (String) charSequence : null;
+        return "";
     }
 
     @Override
@@ -57,9 +52,7 @@ public class ReusableSimpleMessage implements ReusableMessage, CharSequence, Par
     }
 
     @Override
-    public void formatTo(final StringBuilder buffer) {
-        buffer.append(charSequence);
-    }
+    public void formatTo(final StringBuilder buffer) { }
 
     /**
      * This message does not have any parameters, so this method returns the specified array.
@@ -86,29 +79,27 @@ public class ReusableSimpleMessage implements ReusableMessage, CharSequence, Par
 
     @Override
     public Message memento() {
-        return new SimpleMessage(charSequence);
+        return null;
     }
 
     // CharSequence impl
 
     @Override
     public int length() {
-        return charSequence == null ? 0 : charSequence.length();
+        return 0;
     }
 
     @Override
     public char charAt(final int index) {
-        return charSequence.charAt(index);
+        return ' ';
     }
 
     @Override
     public CharSequence subSequence(final int start, final int end) {
-        return charSequence.subSequence(start, end);
+        return null;
     }
 
     @Override
-    public void clear() {
-        charSequence = null;
-    }
+    public void clear() { }
 }
 

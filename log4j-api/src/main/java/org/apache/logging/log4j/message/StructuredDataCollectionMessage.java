@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.StringBuilderFormattable;
 
 /**
@@ -70,23 +71,7 @@ public class StructuredDataCollectionMessage implements StringBuilderFormattable
 
     @Override
     public Object[] getParameters() {
-        final List<Object[]> objectList = new ArrayList<>();
-        int count = 0;
-        for (final StructuredDataMessage msg : structuredDataMessageList) {
-            final Object[] objects = msg.getParameters();
-            if (objects != null) {
-                objectList.add(objects);
-                count += objects.length;
-            }
-        }
-        final Object[] objects = new Object[count];
-        int index = 0;
-        for (final Object[] objs : objectList) {
-           for (final Object obj : objs) {
-               objects[index++] = obj;
-           }
-        }
-        return objects;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     @Override

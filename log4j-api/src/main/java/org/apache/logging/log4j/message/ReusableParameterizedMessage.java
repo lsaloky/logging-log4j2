@@ -144,7 +144,7 @@ public class ReusableParameterizedMessage implements ReusableMessage, ParameterV
      */
     @Override
     public Object[] getParameters() {
-        return null;
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     /**

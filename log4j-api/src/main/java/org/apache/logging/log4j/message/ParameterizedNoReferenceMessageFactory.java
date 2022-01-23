@@ -17,6 +17,7 @@
 package org.apache.logging.log4j.message;
 
 import org.apache.logging.log4j.status.StatusLogger;
+import org.apache.logging.log4j.util.Constants;
 
 /**
  * Creates {@link FormattedMessage} instances for {@link MessageFactory2} methods (and {@link MessageFactory} by
@@ -63,7 +64,7 @@ public final class ParameterizedNoReferenceMessageFactory extends AbstractMessag
 
         @Override
         public Object[] getParameters() {
-            return null;
+            return Constants.EMPTY_OBJECT_ARRAY;
         }
 
         @Override

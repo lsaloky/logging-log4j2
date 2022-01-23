@@ -30,6 +30,7 @@ import org.apache.logging.log4j.core.util.*;
 import org.apache.logging.log4j.core.time.Instant;
 import org.apache.logging.log4j.core.time.MutableInstant;
 import org.apache.logging.log4j.message.*;
+import org.apache.logging.log4j.util.Constants;
 import org.apache.logging.log4j.util.ReadOnlyStringMap;
 import org.apache.logging.log4j.util.StackLocatorUtil;
 import org.apache.logging.log4j.util.StringBuilders;
@@ -248,7 +249,7 @@ public class MutableLogEvent implements LogEvent, ReusableMessage, ParameterVisi
      */
     @Override
     public Object[] getParameters() {
-        return parameters == null ? null : Arrays.copyOf(parameters, parameterCount);
+        return Constants.EMPTY_OBJECT_ARRAY;
     }
 
     @Override
