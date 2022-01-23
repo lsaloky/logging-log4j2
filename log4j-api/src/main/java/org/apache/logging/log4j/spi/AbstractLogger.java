@@ -529,13 +529,8 @@ public abstract class AbstractLogger implements ExtendedLogger, LocationAwareLog
      * @param format The format String for the parameters.
      * @param paramSuppliers The parameters to the method.
      */
-    @Deprecated
     protected EntryMessage enter(final String fqcn, final String format, final MessageSupplier... paramSuppliers) {
-        EntryMessage entryMsg = null;
-        if (isEnabled(Level.TRACE, ENTRY_MARKER, (Object) null, null)) {
-            logMessageSafely(fqcn, Level.TRACE, ENTRY_MARKER, entryMsg = entryMsg(format, paramSuppliers), null);
-        }
-        return entryMsg;
+        return null;
     }
 
     /**
@@ -559,14 +554,8 @@ public abstract class AbstractLogger implements ExtendedLogger, LocationAwareLog
      * @param fqcn The fully qualified class name of the <b>caller</b>.
      * @param messageSupplier The Supplier of the Message.
      */
-    @Deprecated
     protected EntryMessage enter(final String fqcn, final MessageSupplier messageSupplier) {
-        EntryMessage message = null;
-        if (isEnabled(Level.TRACE, ENTRY_MARKER, (Object) null, null)) {
-            logMessageSafely(fqcn, Level.TRACE, ENTRY_MARKER, message = flowMessageFactory.newEntryMessage(
-                    messageSupplier.get()), null);
-        }
-        return message;
+        return null;
     }
 
     /**
@@ -587,16 +576,11 @@ public abstract class AbstractLogger implements ExtendedLogger, LocationAwareLog
         return flowMessage;
     }
 
-    @Deprecated
     @Override
-    public void entry() {
-        entry(FQCN, (Object[]) null);
-    }
+    public void entry() { }
 
     @Override
-    public void entry(final Object... params) {
-        entry(FQCN, params);
-    }
+    public void entry(final Object... params) { }
 
     /**
      * Logs entry to a method with location information.
@@ -917,17 +901,12 @@ public abstract class AbstractLogger implements ExtendedLogger, LocationAwareLog
         logIfEnabled(FQCN, Level.ERROR, null, message, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9);
     }
 
-    @Deprecated
     @Override
     public void exit() {
-        exit(FQCN, (Object) null);
     }
 
-    @Deprecated
     @Override
-    public <R> R exit(final R result) {
-        return exit(FQCN, result);
-    }
+    public <R> R exit(final R result) { return null; }
 
     /**
      * Logs exiting from a method with the result and location information.

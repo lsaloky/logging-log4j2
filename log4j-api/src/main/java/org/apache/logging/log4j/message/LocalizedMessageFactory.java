@@ -31,18 +31,10 @@ import java.util.ResourceBundle;
 public class LocalizedMessageFactory extends AbstractMessageFactory {
     private static final long serialVersionUID = -1996295808703146741L;
 
-    // FIXME: cannot use ResourceBundle name for serialization until Java 8
-    private transient final ResourceBundle resourceBundle;
-    private final String baseName;
-
     public LocalizedMessageFactory(final ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-        this.baseName = null;
     }
 
     public LocalizedMessageFactory(final String baseName) {
-        this.resourceBundle = null;
-        this.baseName = baseName;
     }
 
     /**
@@ -51,7 +43,7 @@ public class LocalizedMessageFactory extends AbstractMessageFactory {
      * @return the resource bundle base name if set. May be null.
      */
     public String getBaseName() {
-        return this.baseName;
+        return "";
     }
 
     /**
@@ -60,7 +52,7 @@ public class LocalizedMessageFactory extends AbstractMessageFactory {
      * @return the resource bundle if set. May be null.
      */
     public ResourceBundle getResourceBundle() {
-        return this.resourceBundle;
+        return null;
     }
 
     /**
@@ -68,27 +60,12 @@ public class LocalizedMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String key) {
-        if (resourceBundle == null) {
-            return new LocalizedMessage(baseName,  key);
-        }
-        return new LocalizedMessage(resourceBundle, key);
+        return null;
     }
     
-    /**
-     * Creates {@link LocalizedMessage} instances.
-     *
-     * @param key The key String, used as a message if the key is absent.
-     * @param params The parameters for the message at the given key.
-     * @return The LocalizedMessage.
-     *
-     * @see org.apache.logging.log4j.message.MessageFactory#newMessage(String, Object...)
-     */
     @Override
     public Message newMessage(final String key, final Object... params) {
-        if (resourceBundle == null) {
-            return new LocalizedMessage(baseName, key, params);
-        }
-        return new LocalizedMessage(resourceBundle, key, params);
+        return null;
     }
 
 }

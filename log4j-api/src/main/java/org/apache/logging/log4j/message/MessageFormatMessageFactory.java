@@ -44,7 +44,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object... params) {
-        return new MessageFormatMessage(message, params);
+        return null;
     }
 
     /**
@@ -52,7 +52,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object p0) {
-        return new MessageFormatMessage(message, p0);
+        return null;
     }
 
     /**
@@ -60,7 +60,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1) {
-        return new MessageFormatMessage(message, p0, p1);
+        return null;
     }
 
     /**
@@ -68,7 +68,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2) {
-        return new MessageFormatMessage(message, p0, p1, p2);
+        return null;
     }
 
     /**
@@ -76,7 +76,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3);
+        return null;
     }
 
     /**
@@ -84,7 +84,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3, p4);
+        return null;
     }
 
     /**
@@ -92,7 +92,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
      */
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3, p4, p5);
+        return null;
     }
 
     /**
@@ -101,7 +101,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3, p4, p5, p6);
+        return null;
     }
 
     /**
@@ -110,7 +110,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6, final Object p7) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3, p4, p5, p6, p7);
+        return null;
     }
 
     /**
@@ -119,7 +119,7 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6, final Object p7, final Object p8) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3, p4, p5, p6, p7, p8);
+        return null;
     }
 
     /**
@@ -128,6 +128,6 @@ public class MessageFormatMessageFactory extends AbstractMessageFactory {
     @Override
     public Message newMessage(final String message, final Object p0, final Object p1, final Object p2, final Object p3, final Object p4, final Object p5,
             final Object p6, final Object p7, final Object p8, final Object p9) {
-        return new MessageFormatMessage(message, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+        return null;
     }
 }

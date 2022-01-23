@@ -36,19 +36,6 @@ import org.apache.logging.log4j.status.StatusLogger;
  */
 public class MessageFormatMessage implements Message {
 
-    private static final Logger LOGGER = StatusLogger.getLogger();
-
-    private static final long serialVersionUID = 1L;
-
-    private static final int HASHVAL = 31;
-
-    private String messagePattern;
-    private transient Object[] parameters;
-    private String[] serializedParameters;
-    private transient String formattedMessage;
-    private transient Throwable throwable;
-    private final Locale locale;
-
     /**
      * Constructs a message.
      * 
@@ -58,13 +45,6 @@ public class MessageFormatMessage implements Message {
      * @since 2.6
      */
     public MessageFormatMessage(final Locale locale, final String messagePattern, final Object... parameters) {
-        this.locale = locale;
-        this.messagePattern = messagePattern;
-        this.parameters = parameters;
-        final int length = parameters == null ? 0 : parameters.length;
-        if (length > 0 && parameters[length - 1] instanceof Throwable) {
-            this.throwable = (Throwable) parameters[length - 1];
-        }
     }
 
     /**
@@ -74,7 +54,6 @@ public class MessageFormatMessage implements Message {
      * @param parameters The objects to format
      */
     public MessageFormatMessage(final String messagePattern, final Object... parameters) {
-        this(Locale.getDefault(Locale.Category.FORMAT), messagePattern, parameters);
     }
 
     /**
@@ -83,10 +62,7 @@ public class MessageFormatMessage implements Message {
      */
     @Override
     public String getFormattedMessage() {
-        if (formattedMessage == null) {
-            formattedMessage = formatMessage(messagePattern, parameters);
-        }
-        return formattedMessage;
+        return "";
     }
 
     /**
@@ -94,9 +70,7 @@ public class MessageFormatMessage implements Message {
      * @return the message pattern.
      */
     @Override
-    public String getFormat() {
-        return messagePattern;
-    }
+    public String getFormat() { return ""; }
 
     /**
      * Returns the message parameters.
@@ -104,20 +78,11 @@ public class MessageFormatMessage implements Message {
      */
     @Override
     public Object[] getParameters() {
-        if (parameters != null) {
-            return parameters;
-        }
-        return serializedParameters;
+        return null;
     }
 
     protected String formatMessage(final String msgPattern, final Object... args) {
-        try {
-            final MessageFormat temp = new MessageFormat(msgPattern, locale);
-            return temp.format(args);
-        } catch (final IllegalFormatException ife) {
-            LOGGER.error("Unable to format msg: " + msgPattern, ife);
-            return msgPattern;
-        }
+        return "";
     }
 
     @Override
@@ -129,52 +94,24 @@ public class MessageFormatMessage implements Message {
             return false;
         }
 
-        final MessageFormatMessage that = (MessageFormatMessage) o;
-
-        if (messagePattern != null ? !messagePattern.equals(that.messagePattern) : that.messagePattern != null) {
-            return false;
-        }
-        return Arrays.equals(serializedParameters, that.serializedParameters);
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = messagePattern != null ? messagePattern.hashCode() : 0;
-        result = HASHVAL * result + (serializedParameters != null ? Arrays.hashCode(serializedParameters) : 0);
-        return result;
+        return 0;
     }
 
 
     @Override
     public String toString() {
-        return getFormattedMessage();
+        return "";
     }
 
     private void writeObject(final ObjectOutputStream out) throws IOException {
-        getFormattedMessage();
-        out.writeUTF(formattedMessage);
-        out.writeUTF(messagePattern);
-        final int length = parameters == null ? 0 : parameters.length;
-        out.writeInt(length);
-        serializedParameters = new String[length];
-        if (length > 0) {
-            for (int i = 0; i < length; i++) {
-                serializedParameters[i] = String.valueOf(parameters[i]);
-                out.writeUTF(serializedParameters[i]);
-            }
-        }
     }
 
     private void readObject(final ObjectInputStream in) throws IOException {
-        parameters = null;
-        throwable = null;
-        formattedMessage = in.readUTF();
-        messagePattern = in.readUTF();
-        final int length = in.readInt();
-        serializedParameters = new String[length];
-        for (int i = 0; i < length; ++i) {
-            serializedParameters[i] = in.readUTF();
-        }
     }
 
     /**
@@ -184,6 +121,6 @@ public class MessageFormatMessage implements Message {
      */
     @Override
     public Throwable getThrowable() {
-        return throwable;
+        return null;
     }
 }
